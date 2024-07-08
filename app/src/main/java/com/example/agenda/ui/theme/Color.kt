@@ -12,7 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val Primary = Color(0xFF006FFD)
 val Secondary = Color(0xFFFFFFFF)
-val title = Color(0xFF1F2024)
+val Title = Color(0xFF1F2024)
 val SubTitle = Color(0xFF71727A)
 val SubMenuBackground = Color(0xFFF8F9FE)
 val MenuActive = Color(0xFF1F2024)

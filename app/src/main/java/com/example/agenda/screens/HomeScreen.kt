@@ -9,11 +9,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -23,9 +30,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.agenda.R
+import com.example.agenda.components.button.ActionButton
 import com.example.agenda.components.menu.BottomMenu
 import com.example.agenda.components.menu.HomeSubMenu
+import com.example.agenda.components.menu.TopMenu
+import com.example.agenda.components.menu.TopMenuHome
+import com.example.agenda.constants.itemsSubMenu
+import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
+import com.example.agenda.ui.theme.SubTitle
+import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.BottomMenuViewModel
 import com.example.agenda.viewmodel.HomeViewModel
 
@@ -34,22 +48,31 @@ fun HomeScreen(bottomMenuViewModel: BottomMenuViewModel, navController: NavContr
     val homeViewModel = viewModel<HomeViewModel>()
 
     Scaffold(
-        modifier = Modifier.background(Secondary),
-        bottomBar = {
-            BottomMenu(
-                bottomViewModel = bottomMenuViewModel,
-                navController = navController
+        modifier = Modifier
+            .background(Secondary)
+            .padding(16.dp),
+        topBar = {
+            TopMenuHome(
+                title = "Projeto",
+                Icons.Filled.Search,
+                titleColor = Title,
+                backgroundColor = Secondary
             )
-        }
+        },
+        bottomBar = {
+            ActionButton("Criar Tasks", Primary, Secondary)
+        },
     ) { innitPadding ->
         Column(
-            modifier = Modifier.padding(innitPadding),
+            modifier = Modifier
+                .background(Secondary)
+                .padding(innitPadding),
             verticalArrangement = Arrangement.Center
         ) {
             HomeSubMenu(
-                onClickButtonLeft = { /*TODO*/ },
-                onClickButtonCenter = { /*TODO*/ },
-                onClickButtonRight = { /*TODO*/ },
+                onClickButtonLeft = { homeViewModel.currentItemSubMenuActive.value = itemsSubMenu[0] },
+                onClickButtonCenter = { homeViewModel.currentItemSubMenuActive.value = itemsSubMenu[1] },
+                onClickButtonRight = { homeViewModel.currentItemSubMenuActive.value = itemsSubMenu[2] },
                 currentItemSubMenuActive = homeViewModel.currentItemSubMenuActive.value
             )
             Column(
@@ -64,8 +87,8 @@ fun HomeScreen(bottomMenuViewModel: BottomMenuViewModel, navController: NavContr
                     painter = painterResource(id = R.drawable.empty),
                     contentDescription = "no data",
                     modifier = Modifier
-                        .width(200.dp)
-                        .height(200.dp)
+                        .width(100.dp)
+                        .height(100.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
@@ -73,7 +96,7 @@ fun HomeScreen(bottomMenuViewModel: BottomMenuViewModel, navController: NavContr
                         fontSize = 18.sp,
                         fontWeight = FontWeight.W900,
                         lineHeight = 22.sp,
-                        letterSpacing = 2.sp,
+                        letterSpacing = 1.sp,
                         textAlign = TextAlign.Center
                     )
                 )

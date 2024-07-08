@@ -5,3 +5,8 @@ enum class ItemsSubMenu {
     IN_PROGRESS,
     FINISHED
 }
+
+val itemsSubMenu = arrayOf("Pendentes", "Em progresso", "Terminados")
+
+
+
