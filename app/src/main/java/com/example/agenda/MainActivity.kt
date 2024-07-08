@@ -1,5 +1,6 @@
 package com.example.agenda
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,18 +17,19 @@ import com.example.agenda.screens.HomeScreen
 import com.example.agenda.screens.NewTaskScreen
 import com.example.agenda.screens.UpdateTaskScreen
 import com.example.agenda.ui.theme.AgendaTheme
-import com.example.agenda.viewmodel.BottomMenuViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         enableEdgeToEdge()
         setContent {
             AgendaTheme {
                 val navController = rememberNavController()
-                val bottomMenuViewModel = viewModel<BottomMenuViewModel>()
 
-                NavBottomBarController(bottomMenuViewModel, navController)
+                NavBottomBarController(navController)
             }
         }
     }
@@ -35,31 +37,26 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavBottomBarController(
-    bottomMenuViewModel: BottomMenuViewModel,
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = ItemsMenu.HOME.name) {
         composable(ItemsMenu.HOME.name) {
             HomeScreen(
-                bottomMenuViewModel,
                 navController
             )
         }
         composable(ItemsMenu.NEW_TASK.name) {
             NewTaskScreen(
-                bottomMenuViewModel,
                 navController
             )
         }
         composable(ItemsMenu.UPDATE_TASK.name) {
             UpdateTaskScreen(
-                bottomMenuViewModel,
                 navController
             )
         }
         composable(ItemsMenu.DELETE_TASK.name) {
             DeleteTaskScreen(
-                bottomMenuViewModel,
                 navController
             )
         }

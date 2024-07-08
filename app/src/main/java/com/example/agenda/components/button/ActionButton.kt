@@ -1,6 +1,7 @@
 package com.example.agenda.components.button
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ActionButton(text: String, backgroundColor: Color, textColor: Color) {
+fun ActionButton(text: String, backgroundColor: Color, textColor: Color, onClick: () -> Unit) {
     BottomAppBar(
         containerColor = Color.Transparent
     ) {
@@ -27,7 +28,8 @@ fun ActionButton(text: String, backgroundColor: Color, textColor: Color) {
                 .clip(RoundedCornerShape(12.dp))
                 .fillMaxWidth()
                 .height(60.dp)
-                .background(backgroundColor),
+                .background(backgroundColor)
+                .clickable { onClick() },
             contentAlignment = Alignment.Center,
         ) {
             Text(
