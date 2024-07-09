@@ -1,9 +1,9 @@
 package com.example.agenda.constants
 
-enum class ItemsSubMenu {
-    PENDING,
-    IN_PROGRESS,
-    FINISHED
+enum class TaskStatus(val value:String) {
+    PENDING("Pendente"),
+    IN_PROGRESS("Em progresso"),
+    FINISHED("Terminado")
 }
 
 val itemsSubMenu = arrayOf("Pendentes", "Em progresso", "Terminados")

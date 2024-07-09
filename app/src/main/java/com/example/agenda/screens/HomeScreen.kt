@@ -3,6 +3,7 @@ package com.example.agenda.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.agenda.R
 import com.example.agenda.components.button.ActionButton
+import com.example.agenda.components.list.Card
 import com.example.agenda.components.menu.HomeSubMenu
 import com.example.agenda.components.menu.TopBarHome
 import com.example.agenda.constants.ItemsMenu
@@ -69,7 +74,10 @@ fun HomeScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .background(Secondary)
-                .padding(innitPadding),
+                .padding(
+                    top = innitPadding.calculateTopPadding(),
+                    bottom = innitPadding.calculateBottomPadding()
+                ),
             verticalArrangement = Arrangement.Center
         ) {
             HomeSubMenu(
@@ -94,7 +102,7 @@ fun HomeScreen(navController: NavController) {
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .padding(vertical = 16.dp)
             ) { page ->
                 when (page) {
                     0 -> {
@@ -128,14 +136,22 @@ fun ShowTasks(page: Int) {
             // chamar o componente
 
             if (myTasks.isEmpty()) {
-                WhenDontHaveNothingToShow("pendentes")
+                //WhenDontHaveNothingToShow("pendentes")
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Card()
+                    Card()
+                    Card()
+                }
             } else {
-                Text(
-                    text = "Page: 3",
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Card()
             }
         }
+
         1 -> {
             // fazer a requisição no banco
             // verificar se o valor de retorno é vazio
@@ -144,12 +160,10 @@ fun ShowTasks(page: Int) {
             if (myTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("em progresso")
             } else {
-                Text(
-                    text = "Page: 3",
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Card()
             }
         }
+
         2 -> {
             // fazer a requisição no banco
             // verificar se o valor de retorno é vazio
@@ -158,12 +172,10 @@ fun ShowTasks(page: Int) {
             if (myTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("terminados")
             } else {
-                Text(
-                    text = "Page: 3",
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Card()
             }
         }
+
         else -> {
             // algo deu errado...
             Text(
