@@ -1,5 +1,12 @@
 [versions]
 agp = "8.5.0"
+coreKtxVersion = "1.12.0"
+insertKoinKoinAndroid = "3.4.0"
+koinAndroid = "3.1.5"
+koinAndroidVersion = "2.2.2"
+koinAndroidViewmodel = "3.1.5"
+koinAndroidxCompose = "3.4.0"
+koinCore = "3.1.5"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -9,9 +16,20 @@ lifecycleRuntimeKtx = "2.8.2"
 activityCompose = "1.9.0"
 composeBom = "2024.04.01"
 navigationCompose = "2.7.7"
+roomCompiler = "2.6.0"
+roomKtx = "2.6.0"
+roomRuntime = "2.6.1"
+roomRuntimeVersion = "2.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-compiler-v260 = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-ktx-v260 = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-room-runtime-v260 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -26,6 +44,12 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-android-v340 = { module = "io.insert-koin:koin-android", version.ref = "insertKoinKoinAndroid" }
+koin-android-viewmodel = { module = "org.koin:koin-android-viewmodel", version.ref = "koinAndroidViewmodel" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+koin-core = { module = "org.koin:koin-core", version.ref = "koinCore" }
+koin-koin-android = { module = "org.koin:koin-android", version.ref = "koinAndroidVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

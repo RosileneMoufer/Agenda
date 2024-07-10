@@ -1,5 +1,6 @@
 package com.example.agenda.screens
 
+import android.net.http.UrlRequest.Status
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -39,12 +40,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.agenda.components.Divisor
 import com.example.agenda.components.button.ActionButton
 import com.example.agenda.components.button.CardButton
-import com.example.agenda.components.menu.TopBarHome
+import com.example.agenda.components.button.StatusButton
 import com.example.agenda.components.menu.TopBarNewTask
 import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.constants.TaskStatus
+import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.StrokeForm
@@ -100,21 +103,15 @@ fun NewTaskScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(StrokeForm)
-                    .height(1.dp)
-            )
+            Divisor()
 
             DescriptionComponent()
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(StrokeForm)
-                    .height(1.dp)
-            )
+            Divisor()
+
+            StatusComponent()
+
+            Divisor()
 
             HourComponent()
         }
@@ -157,18 +154,26 @@ fun DescriptionComponent() {
 
 @Composable
 fun StatusComponent() {
-    Column {
+    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
-            "Hora", style = TextStyle(
+            "Status", style = TextStyle(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )
         )
-        Row(horizontalArrangement = Arrangement.SpaceBetween) {
-            for (item in TaskStatus.entries) {
-                // usar chip...
-                CardButton(title = , backgroundColor = , textColor = ) {
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            for (item in TaskStatus.entries) {
+                StatusButton(
+                    Modifier.weight(1F),
+                    title = item.value,
+                    backgroundColor = ButtonInactive,
+                    textColor = Title,
+                    12.sp
+                ) {
+                    // TODO
                 }
             }
         }
@@ -202,9 +207,6 @@ fun HourComponent() {
     }
 
     if (isExpanded) {
-        Text(
-            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            modifier = Modifier.padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 24.dp)
-        )
+        // TODO
     }
 }

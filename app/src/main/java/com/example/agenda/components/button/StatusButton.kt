@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.example.agenda.ui.theme.ButtonInactive
 
 @Composable
-fun CardButton(
+fun StatusButton(
+    modifier: Modifier,
     title: String,
     backgroundColor: Color,
     textColor: Color,
@@ -27,18 +28,19 @@ fun CardButton(
     onClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(24.dp))
             .background(backgroundColor)
-            .padding(vertical = 8.dp, horizontal = 24.dp)
+            .padding(8.dp)
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = title.uppercase(),
+            text = title,
             style = TextStyle(
                 color = textColor,
                 fontSize = fontSize,
+                fontWeight = FontWeight.W600
             )
         )
     }

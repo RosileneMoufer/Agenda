@@ -153,8 +153,8 @@ fun Card() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.End),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CardButton("Alterar", ButtonInactive, Primary) {}
-                CardButton("Deletar", ButtonDeleteTask, Secondary) {}
+                CardButton("Alterar", ButtonInactive, Primary, 14.sp) { /*TODO*/}
+                CardButton("Deletar", ButtonDeleteTask, Secondary, 14.sp) { /*TODO*/ }
             }
         }
     } else {

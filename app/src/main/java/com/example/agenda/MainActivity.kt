@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.agenda.backend.data.Task
 import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.screens.DeleteTaskScreen
 import com.example.agenda.screens.HomeScreen
@@ -52,7 +53,11 @@ fun NavBottomBarController(
         }
         composable(ItemsMenu.UPDATE_TASK.name) {
             UpdateTaskScreen(
-                navController
+                Task(id = 123,
+                    title = "Editando",
+                    description = "ijfeiw jfiejwi",
+                    status = "Pendente",
+                    hour = "11:20"), navController
             )
         }
         composable(ItemsMenu.DELETE_TASK.name) {
