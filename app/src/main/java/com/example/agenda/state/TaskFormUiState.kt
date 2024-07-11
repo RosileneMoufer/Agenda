@@ -10,5 +10,6 @@ data class TaskFormUiState(
 
     val onTitleChange: (String) -> Unit = {},
     val onDescriptionChange: (String) -> Unit = {},
+    var onStatusChange: (String) -> Unit = {},
     val onDateChange: (String) -> Unit = {},
 )

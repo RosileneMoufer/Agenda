@@ -3,6 +3,7 @@ package com.example.agenda.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.agenda.backend.repository.TasksRepository
+import com.example.agenda.constants.TaskStatus
 import com.example.agenda.model.TaskModel
 import com.example.agenda.state.TaskFormUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +39,21 @@ class FormViewModel(
                 },
             )
         }
+    }
+
+    fun cleanForm() {
+        _uiState.update {it.copy(
+            title = "",
+            description = "",
+            status = TaskStatus.PENDING.value,
+            date = ""
+        )}
+    }
+
+    fun statusForm(status: String) {
+        _uiState.update {it.copy(
+            status = status
+        )}
     }
 
     suspend fun save() {

@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,10 +48,14 @@ import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.FormViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun NewTaskScreen(navController: NavController, viewModel: FormViewModel, uiState: TaskFormUiState) {
+fun NewTaskScreen(navController: NavController, viewModel2: FormViewModel, uiState2: TaskFormUiState) {
     val scope = rememberCoroutineScope()
+
+    val viewModel = koinViewModel<FormViewModel>()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -60,7 +65,8 @@ fun NewTaskScreen(navController: NavController, viewModel: FormViewModel, uiStat
             TopBarNewTask(
                 title = "Criar Task",
                 titleColor = Title,
-                navController
+                navController,
+                viewModel
             )
         },
         bottomBar = {
@@ -93,7 +99,7 @@ fun NewTaskScreen(navController: NavController, viewModel: FormViewModel, uiStat
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor = Secondary,
                     unfocusedBorderColor = Secondary,
-                    unfocusedTextColor = Secondary,
+                    unfocusedTextColor = Title,
                     focusedContainerColor = Secondary,
                     focusedBorderColor = StrokeForm,
                     focusedLabelColor = Title,
@@ -107,7 +113,7 @@ fun NewTaskScreen(navController: NavController, viewModel: FormViewModel, uiStat
 
             Divisor()
 
-            StatusComponent(uiState)
+            StatusComponent(uiState, viewModel)
 
             Divisor()
 
@@ -169,7 +175,7 @@ fun DescriptionComponent(uiState: TaskFormUiState) {
 }
 
 @Composable
-fun StatusComponent(uiState: TaskFormUiState) {
+fun StatusComponent(uiState: TaskFormUiState, viewModel: FormViewModel) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
             "Status", style = TextStyle(
@@ -185,11 +191,12 @@ fun StatusComponent(uiState: TaskFormUiState) {
                 StatusButton(
                     Modifier.weight(1F),
                     title = item.value,
-                    backgroundColor = ButtonInactive,
-                    textColor = Title,
+                    backgroundColor = if (uiState.status == item.value) Primary else ButtonInactive,
+                    textColor = if (uiState.status == item.value) Secondary else Title,
                     12.sp
                 ) {
-                    uiState.status = item.value
+                    //uiState.status = item.value
+                    viewModel.statusForm(item.value)
                 }
             }
         }

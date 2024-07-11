@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
+import com.example.agenda.viewmodel.FormViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,12 @@ fun TopBarHome(title: String, titleColor: Color) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarNewTask(title: String, titleColor: Color, navController: NavController) {
+fun TopBarNewTask(
+    title: String,
+    titleColor: Color,
+    navController: NavController,
+    formViewModel: FormViewModel
+) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(bottom = 20.dp),
         colors = TopAppBarDefaults.topAppBarColors(Secondary),
@@ -67,8 +73,7 @@ fun TopBarNewTask(title: String, titleColor: Color, navController: NavController
         },
         actions = {
             ActionTextButton("Limpar") {
-                // limpar os dados digitados pelo usuário
-                navController.popBackStack()
+                formViewModel.cleanForm()
             }
         }
     )

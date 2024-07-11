@@ -27,5 +27,5 @@ interface TaskDao {
     fun getAllTasks() : Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM tasks WHERE status = :status")
-    fun getAllPendingTasks(status: String) : Flow<List<TaskEntity>>
+    fun getTasksByStatus(status: String) : Flow<List<TaskEntity>>
 }

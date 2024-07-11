@@ -4,6 +4,7 @@ import androidx.room.Room
 import com.example.agenda.backend.database.AppDatabase
 import com.example.agenda.backend.repository.TasksRepository
 import com.example.agenda.viewmodel.FormViewModel
+import com.example.agenda.viewmodel.HomeViewModel
 import com.example.agenda.viewmodel.TasksListViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -13,6 +14,7 @@ import org.koin.dsl.module
 val appModule = module {
     viewModelOf(::FormViewModel)
     viewModelOf(::TasksListViewModel)
+    viewModelOf(::HomeViewModel)
 }
 
 val storageModule = module {

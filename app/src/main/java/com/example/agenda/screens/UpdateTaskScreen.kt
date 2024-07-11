@@ -34,21 +34,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.agenda.backend.entity.TaskEntity
 import com.example.agenda.components.Divisor
 import com.example.agenda.components.button.ActionButton
 import com.example.agenda.components.button.StatusButton
 import com.example.agenda.components.menu.TopBarNewTask
-import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.constants.TaskStatus
 import com.example.agenda.model.TaskModel
 import com.example.agenda.state.TaskFormUiState
 import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.FormViewModel
 import kotlinx.coroutines.launch
@@ -69,7 +65,8 @@ fun UpdateTaskScreen(task: TaskModel, navController: NavController) {
             TopBarNewTask(
                 title = "Alterando Task",
                 titleColor = Title,
-                navController
+                navController,
+                viewModel
             )
         },
         bottomBar = {

@@ -2,6 +2,7 @@ package com.example.agenda.backend.repository
 
 import com.example.agenda.backend.dao.TaskDao
 import com.example.agenda.backend.entity.TaskEntity
+import com.example.agenda.constants.TaskStatus
 import com.example.agenda.model.TaskModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,10 @@ import kotlinx.coroutines.withContext
 class TasksRepository(
     private val dao: TaskDao
 ) {
-    val tasks get() = dao.getAllTasks()
+    val getAllTasks get() = dao.getAllTasks()
+    val getAllPendingTasks get() = dao.getTasksByStatus(TaskStatus.PENDING.value)
+    val getAllInProgressTasks get() = dao.getTasksByStatus(TaskStatus.IN_PROGRESS.value)
+    val getAllFinishedTasks get() = dao.getTasksByStatus(TaskStatus.FINISHED.value)
 
     suspend fun save(task: TaskModel) = withContext(IO) {
         dao.saveTask(task.toTaskEntity())
@@ -26,10 +30,6 @@ class TasksRepository(
 
     fun getTask(id: Long) {
         dao.getTask(id)
-    }
-
-    fun getAllPendingTasks(status: String) {
-        dao.getAllPendingTasks(status)
     }
 }
 
