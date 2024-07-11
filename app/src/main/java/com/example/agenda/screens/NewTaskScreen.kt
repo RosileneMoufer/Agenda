@@ -1,11 +1,6 @@
 package com.example.agenda.screens
 
-import android.net.http.UrlRequest.Status
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,14 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,32 +24,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.agenda.components.Divisor
 import com.example.agenda.components.button.ActionButton
-import com.example.agenda.components.button.CardButton
 import com.example.agenda.components.button.StatusButton
 import com.example.agenda.components.menu.TopBarNewTask
-import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.constants.TaskStatus
+import com.example.agenda.state.TaskFormUiState
 import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.FormViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun NewTaskScreen(navController: NavController) {
-    val formViewModel = viewModel<FormViewModel>()
+fun NewTaskScreen(navController: NavController, viewModel: FormViewModel, uiState: TaskFormUiState) {
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier
@@ -71,7 +65,11 @@ fun NewTaskScreen(navController: NavController) {
         },
         bottomBar = {
             ActionButton("Criar", Primary, Secondary) {
-                navController.navigate(ItemsMenu.NEW_TASK.name)
+                scope.launch {
+                    viewModel.save()
+
+                    navController.popBackStack()
+                }
             }
         },
     ) { innitPadding ->
@@ -83,8 +81,8 @@ fun NewTaskScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState())
         ) {
             TextField(
-                value = formViewModel.title.value,
-                onValueChange = { formViewModel.title.value = it },
+                value = uiState.title,
+                onValueChange = uiState.onTitleChange,
                 label = {
                     Text(
                         text = "Título",
@@ -105,21 +103,21 @@ fun NewTaskScreen(navController: NavController) {
 
             Divisor()
 
-            DescriptionComponent()
+            DescriptionComponent(uiState)
 
             Divisor()
 
-            StatusComponent()
+            StatusComponent(uiState)
 
             Divisor()
 
-            HourComponent()
+            DateComponent(uiState)
         }
     }
 }
 
 @Composable
-fun DescriptionComponent() {
+fun DescriptionComponent(uiState: TaskFormUiState) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Row(
@@ -145,15 +143,33 @@ fun DescriptionComponent() {
     }
 
     if (isExpanded) {
-        Text(
-            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            modifier = Modifier.padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 24.dp)
+        TextField(
+            value = uiState.description,
+            onValueChange = uiState.onDescriptionChange,
+            maxLines = 5,
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Secondary,
+                unfocusedBorderColor = Color.Transparent,
+                unfocusedTextColor = Title,
+                focusedContainerColor = Secondary,
+                focusedBorderColor = Color.Transparent,
+                focusedLabelColor = Title,
+                cursorColor = Primary
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 12.dp,
+                    start = 12.dp,
+                    end = 12.dp,
+                    bottom = 24.dp
+                )
         )
     }
 }
 
 @Composable
-fun StatusComponent() {
+fun StatusComponent(uiState: TaskFormUiState) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
             "Status", style = TextStyle(
@@ -173,7 +189,7 @@ fun StatusComponent() {
                     textColor = Title,
                     12.sp
                 ) {
-                    // TODO
+                    uiState.status = item.value
                 }
             }
         }
@@ -181,32 +197,25 @@ fun StatusComponent() {
 }
 
 @Composable
-fun HourComponent() {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "Hora", style = TextStyle(
+fun DateComponent(uiState: TaskFormUiState) {
+    TextField(
+        value = uiState.date,
+        onValueChange = uiState.onDateChange,
+        label = {
+            Text(
+                text = "Data",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )
-        )
-        IconButton(onClick = { isExpanded = !isExpanded }) {
-            Icon(
-                imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                contentDescription = "show/hide",
-                tint = Primary
-            )
-        }
-    }
-
-    if (isExpanded) {
-        // TODO
-    }
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Secondary,
+            unfocusedBorderColor = Secondary,
+            unfocusedTextColor = Secondary,
+            focusedContainerColor = Secondary,
+            focusedBorderColor = StrokeForm,
+            focusedLabelColor = Title,
+        ),
+        modifier = Modifier.fillMaxWidth()
+    )
 }

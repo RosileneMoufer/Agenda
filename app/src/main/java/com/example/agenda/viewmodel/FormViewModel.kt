@@ -1,24 +1,66 @@
 package com.example.agenda.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.agenda.backend.repository.TasksRepository
+import com.example.agenda.model.TaskModel
+import com.example.agenda.state.TaskFormUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class FormViewModel: ViewModel() {
-    private val _title = mutableStateOf("")
-    private val _description = mutableStateOf("")
-    private val _status = mutableStateOf("")
-    private val _hour = mutableStateOf("")
+class FormViewModel(
+    private val repository: TasksRepository,
+): ViewModel() {
 
-    var title: MutableState<String> = _title
-    var description: MutableState<String> = _description
-    var status: MutableState<String> = _status
-    var hour: MutableState<String> = _hour
+    private val _uiState: MutableStateFlow<TaskFormUiState> =
+        MutableStateFlow(TaskFormUiState())
+    val uiState = _uiState.asStateFlow()
 
-    /*
-    fun CleanForm() {
-
+    init {
+        _uiState.update { currentState ->
+            currentState.copy(
+                onTitleChange = { title ->
+                    _uiState.update {
+                        it.copy(title = title)
+                    }
+                },
+                onDescriptionChange = { description ->
+                    _uiState.update {
+                        it.copy(description = description)
+                    }
+                },
+                onDateChange = { date ->
+                    _uiState.update {
+                        it.copy(date = date)
+                    }
+                },
+            )
+        }
     }
 
-     */
+    suspend fun save() {
+        val task = TaskModel(
+            title = _uiState.value.title,
+            description = _uiState.value.description,
+            status = _uiState.value.status,
+            date = _uiState.value.date
+        )
+        viewModelScope.launch {
+            repository.save(task)
+        }
+    }
+
+    fun update(task: TaskModel) {
+        viewModelScope.launch {
+            repository.update(task)
+        }
+    }
+
+    fun delete(task: TaskModel) {
+        viewModelScope.launch {
+            repository.delete(task)
+        }
+    }
 }

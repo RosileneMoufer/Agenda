@@ -21,35 +21,45 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.agenda.backend.data.Task
+import com.example.agenda.backend.entity.TaskEntity
 import com.example.agenda.components.Divisor
 import com.example.agenda.components.button.ActionButton
 import com.example.agenda.components.button.StatusButton
 import com.example.agenda.components.menu.TopBarNewTask
 import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.constants.TaskStatus
+import com.example.agenda.model.TaskModel
+import com.example.agenda.state.TaskFormUiState
 import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.FormViewModel
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun UpdateTaskScreen(task: Task, navController: NavController) {
-    val formViewModel = viewModel<FormViewModel>()
+fun UpdateTaskScreen(task: TaskModel, navController: NavController) {
+
+    val scope = rememberCoroutineScope()
+    val viewModel = koinViewModel<FormViewModel>()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -64,7 +74,10 @@ fun UpdateTaskScreen(task: Task, navController: NavController) {
         },
         bottomBar = {
             ActionButton("Alterar", Primary, Secondary) {
-                navController.navigate(ItemsMenu.NEW_TASK.name)
+                scope.launch {
+                    viewModel.update(task)
+                    navController.popBackStack()
+                }
             }
         },
     ) { innitPadding ->
@@ -75,28 +88,30 @@ fun UpdateTaskScreen(task: Task, navController: NavController) {
                 .padding(innitPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            TaskComponent(task, formViewModel)
+            TitleEditComponent(task, uiState)
 
             Divisor()
 
-            DescriptionComponent(task)
+            DescriptionEditComponent(task, uiState)
 
             Divisor()
 
-            StatusComponent(task)
+            StatusEditComponent(task)
 
             Divisor()
 
-            HourComponent(task)
+            DateEditComponent(task)
         }
     }
 }
 
 @Composable
-fun TaskComponent(task: Task, formViewModel: FormViewModel) {
+fun TitleEditComponent(task: TaskModel, uiState: TaskFormUiState) {
+    uiState.title = task.title
+
     TextField(
-        value = formViewModel.title.value,
-        onValueChange = { formViewModel.title.value = it },
+        value = uiState.title,
+        onValueChange = uiState.onTitleChange,
         label = {
             Text(
                 text = "Título",
@@ -107,9 +122,9 @@ fun TaskComponent(task: Task, formViewModel: FormViewModel) {
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedContainerColor = Secondary,
             unfocusedBorderColor = Secondary,
-            unfocusedTextColor = Secondary,
+            unfocusedTextColor = Title,
             focusedContainerColor = Secondary,
-            focusedBorderColor = StrokeForm,
+            focusedBorderColor = Color.Transparent,
             focusedLabelColor = Title,
         ),
         modifier = Modifier.fillMaxWidth()
@@ -117,8 +132,10 @@ fun TaskComponent(task: Task, formViewModel: FormViewModel) {
 }
 
 @Composable
-fun DescriptionComponent(task: Task) {
+fun DescriptionEditComponent(task: TaskModel, uiState: TaskFormUiState) {
     var isExpanded by remember { mutableStateOf(false) }
+
+    uiState.description = task.description
 
     Row(
         Modifier
@@ -143,15 +160,33 @@ fun DescriptionComponent(task: Task) {
     }
 
     if (isExpanded) {
-        Text(
-            "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-            modifier = Modifier.padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 24.dp)
+        TextField(
+            value = uiState.description,
+            onValueChange = uiState.onDescriptionChange,
+            maxLines = 5,
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor = Secondary,
+                unfocusedBorderColor = Color.Transparent,
+                unfocusedTextColor = Title,
+                focusedContainerColor = Secondary,
+                focusedBorderColor = Color.Transparent,
+                focusedLabelColor = Title,
+                cursorColor = Primary
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 12.dp,
+                    start = 12.dp,
+                    end = 12.dp,
+                    bottom = 24.dp
+                )
         )
     }
 }
 
 @Composable
-fun StatusComponent(task: Task) {
+fun StatusEditComponent(task: TaskModel) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
             "Status", style = TextStyle(
@@ -179,7 +214,7 @@ fun StatusComponent(task: Task) {
 }
 
 @Composable
-fun HourComponent(task: Task) {
+fun DateEditComponent(task: TaskModel) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Row(
@@ -190,7 +225,7 @@ fun HourComponent(task: Task) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            "Hora", style = TextStyle(
+            "Data", style = TextStyle(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )

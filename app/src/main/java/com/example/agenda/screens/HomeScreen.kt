@@ -3,19 +3,19 @@ package com.example.agenda.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +26,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +40,7 @@ import com.example.agenda.components.menu.HomeSubMenu
 import com.example.agenda.components.menu.TopBarHome
 import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.constants.itemsSubMenu
+import com.example.agenda.state.TasksListUiState
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.SubTitle
@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 3 })
 
@@ -57,6 +57,7 @@ fun HomeScreen(navController: NavController) {
 
     Scaffold(
         modifier = Modifier
+            .fillMaxSize()
             .background(Secondary)
             .padding(16.dp),
         topBar = {
@@ -73,6 +74,7 @@ fun HomeScreen(navController: NavController) {
     ) { innitPadding ->
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .background(Secondary)
                 .padding(
                     top = innitPadding.calculateTopPadding(),
@@ -101,54 +103,34 @@ fun HomeScreen(navController: NavController) {
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .fillMaxHeight()
                     .padding(vertical = 16.dp)
             ) { page ->
-                when (page) {
-                    0 -> {
-                        subMenuState = itemsSubMenu[pagerState.currentPage]
-                        ShowTasks(page)
-                    }
-
-                    1 -> {
-                        subMenuState = itemsSubMenu[pagerState.currentPage]
-                        ShowTasks(page)
-                    }
-
-                    2 -> {
-                        subMenuState = itemsSubMenu[pagerState.currentPage]
-                        ShowTasks(page)
-                    }
-                }
+                subMenuState = itemsSubMenu[pagerState.currentPage]
+                ShowTasks(page, uiState, navController)
             }
         }
     }
 }
 
 @Composable
-fun ShowTasks(page: Int) {
+fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController) {
     val myTasks = intArrayOf()
 
     when (page) {
         0 -> {
-            // fazer a requisição no banco
-            // verificar se o valor de retorno é vazio
-            // chamar o componente
-
-            if (myTasks.isEmpty()) {
-                //WhenDontHaveNothingToShow("pendentes")
-                Column(
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Card()
-                    Card()
-                    Card()
-                }
+            if (uiState.tasks.isEmpty()) {
+                WhenDontHaveNothingToShow("pendentes")
             } else {
-                Card()
+                LazyColumn(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) { itemsIndexed(uiState.tasks) { _, task ->
+                    Card(task, navController)
+                }}
             }
         }
 
@@ -160,7 +142,7 @@ fun ShowTasks(page: Int) {
             if (myTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("em progresso")
             } else {
-                Card()
+                //Card(task)
             }
         }
 
@@ -172,7 +154,7 @@ fun ShowTasks(page: Int) {
             if (myTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("terminados")
             } else {
-                Card()
+                //Card(task)
             }
         }
 

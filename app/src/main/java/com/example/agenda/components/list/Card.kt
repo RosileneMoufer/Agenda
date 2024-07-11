@@ -3,7 +3,6 @@ package com.example.agenda.components.list
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,17 +31,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.agenda.components.button.CardButton
-import com.example.agenda.constants.taskStatus
+import com.example.agenda.constants.ItemsMenu
+import com.example.agenda.constants.TaskStatus
+import com.example.agenda.model.TaskModel
 import com.example.agenda.ui.theme.ButtonDeleteTask
 import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.StrokeForm
+import com.example.agenda.viewmodel.FormViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun Card() {
+fun Card(task: TaskModel, navController: NavController) {
     var isCardExpanded by remember { mutableStateOf(false) }
+    val viewModel = koinViewModel<FormViewModel>()
+
 
     if (isCardExpanded) {
         Column(
@@ -76,7 +82,7 @@ fun Card() {
                     style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 Text(
-                    "Título",
+                    task.title,
                     style = TextStyle(fontSize = 14.sp)
                 )
             }
@@ -93,7 +99,7 @@ fun Card() {
                     style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 Text(
-                    "Título",
+                    task.description,
                     style = TextStyle(fontSize = 14.sp)
                 )
             }
@@ -110,7 +116,7 @@ fun Card() {
                     "Status",
                     style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
-                StatusComponent(taskStatus[2])
+                StatusComponent(task.status)
             }
             Row(
                 Modifier
@@ -125,10 +131,10 @@ fun Card() {
                     style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 Text(
-                    "01/01/2024",
+                    task.date,
                     style = TextStyle(fontSize = 14.sp)
                 )
-            }
+            }/*
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -145,7 +151,7 @@ fun Card() {
                     "00:00",
                     style = TextStyle(fontSize = 14.sp)
                 )
-            }
+            }*/
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -153,8 +159,16 @@ fun Card() {
                 horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.End),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CardButton("Alterar", ButtonInactive, Primary, 14.sp) { /*TODO*/}
-                CardButton("Deletar", ButtonDeleteTask, Secondary, 14.sp) { /*TODO*/ }
+                CardButton("Alterar", ButtonInactive, Primary, 14.sp) {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(
+                        key = "task",
+                        value = task
+                    )
+                    navController.navigate(ItemsMenu.UPDATE_TASK.name)
+                }
+                CardButton("Deletar", ButtonDeleteTask, Secondary, 14.sp) {
+                    viewModel.delete(task)
+                }
             }
         }
     } else {
@@ -169,7 +183,7 @@ fun Card() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Text...")
+            Text(task.title)
             IconButton(onClick = { isCardExpanded = !isCardExpanded }) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowDown,

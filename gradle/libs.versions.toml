@@ -6,7 +6,9 @@ koinAndroid = "3.1.5"
 koinAndroidVersion = "2.2.2"
 koinAndroidViewmodel = "3.1.5"
 koinAndroidxCompose = "3.4.0"
+koinBom = "3.5.6"
 koinCore = "3.1.5"
+koinCoreVersion = "3.5.6"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -30,6 +32,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRunt
 androidx-room-ktx-v260 = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-runtime-v260 = { module = "androidx.room:room-runtime", version.ref = "roomRuntimeVersion" }
+insert-koin-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCoreVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -48,6 +51,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndr
 koin-android-v340 = { module = "io.insert-koin:koin-android", version.ref = "insertKoinKoinAndroid" }
 koin-android-viewmodel = { module = "org.koin:koin-android-viewmodel", version.ref = "koinAndroidViewmodel" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
 koin-core = { module = "org.koin:koin-core", version.ref = "koinCore" }
 koin-koin-android = { module = "org.koin:koin-android", version.ref = "koinAndroidVersion" }
 

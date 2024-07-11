@@ -1,3 +1,12 @@
 package com.example.agenda.constants
 
-val taskStatus = arrayOf("Pendente", "Em progresso", "Terminado")
+enum class TaskStatus(val value:String) {
+    PENDING("Pendente"),
+    IN_PROGRESS("Em progresso"),
+    FINISHED("Terminado")
+}
+
+val itemsSubMenu = arrayOf("Pendentes", "Em progresso", "Terminados")
+
+
+

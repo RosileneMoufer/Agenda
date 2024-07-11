@@ -6,10 +6,3 @@ enum class ItemsMenu() {
     UPDATE_TASK,
     DELETE_TASK
 }
-
-enum class ItemsMenuName() {
-    HOME,
-    CRIAR,
-    ALTERAR,
-    DELETAR
-}

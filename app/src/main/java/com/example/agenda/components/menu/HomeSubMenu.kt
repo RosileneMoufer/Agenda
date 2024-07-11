@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.agenda.constants.ItemsSubMenu
+import com.example.agenda.constants.TaskStatus
 import com.example.agenda.constants.itemsSubMenu
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.SubMenuActive
@@ -50,13 +50,13 @@ fun HomeSubMenu(
                 .fillMaxWidth()
                 .weight(1F),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (currentItemSubMenuActive == ItemsSubMenu.PENDING.ordinal) Secondary else SubMenuBackground
+                containerColor = if (currentItemSubMenuActive == TaskStatus.PENDING.ordinal) Secondary else SubMenuBackground
             )
         ) {
             Text(
                 text = itemsSubMenu[0],
                 style = TextStyle(
-                    color = if (currentItemSubMenuActive == ItemsSubMenu.PENDING.ordinal) SubMenuActive else SubMenuInactive,
+                    color = if (currentItemSubMenuActive == TaskStatus.PENDING.ordinal) SubMenuActive else SubMenuInactive,
                     fontWeight = FontWeight.W600,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center
@@ -72,13 +72,13 @@ fun HomeSubMenu(
                 .fillMaxWidth()
                 .weight(1F),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (currentItemSubMenuActive == ItemsSubMenu.IN_PROGRESS.ordinal) Secondary else SubMenuBackground
+                containerColor = if (currentItemSubMenuActive == TaskStatus.IN_PROGRESS.ordinal) Secondary else SubMenuBackground
             )
         ) {
             Text(
                 text = itemsSubMenu[1],
                 style = TextStyle(
-                    color = if (currentItemSubMenuActive == ItemsSubMenu.IN_PROGRESS.ordinal) SubMenuActive else SubMenuInactive,
+                    color = if (currentItemSubMenuActive == TaskStatus.IN_PROGRESS.ordinal) SubMenuActive else SubMenuInactive,
                     fontWeight = FontWeight.W600,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center
@@ -94,13 +94,13 @@ fun HomeSubMenu(
                 .fillMaxWidth()
                 .weight(1F),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if ((currentItemSubMenuActive == ItemsSubMenu.FINISHED.ordinal)) Secondary else SubMenuBackground
+                containerColor = if ((currentItemSubMenuActive == TaskStatus.FINISHED.ordinal)) Secondary else SubMenuBackground
             )
         ) {
             Text(
                 text = itemsSubMenu[2],
                 style = TextStyle(
-                    color = if (currentItemSubMenuActive == ItemsSubMenu.FINISHED.ordinal) SubMenuActive else SubMenuInactive,
+                    color = if (currentItemSubMenuActive == TaskStatus.FINISHED.ordinal) SubMenuActive else SubMenuInactive,
                     fontWeight = FontWeight.W600,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center

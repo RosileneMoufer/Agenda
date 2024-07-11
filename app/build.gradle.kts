@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+    id("kotlin-parcelize")
 }
 
 android {
@@ -72,6 +73,19 @@ dependencies {
     // change the screen orientation
     implementation(libs.androidx.activity.compose)
 
+    /*
+    //Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // Koin
+    implementation(libs.koin.bom)
+    implementation(libs.insert.koin.koin.core)
+    implementation ("io.insert-koin:koin-android:$3.5.6")
+     */
+
     //Room
     implementation("androidx.room:room-runtime:2.6.0")
     implementation("androidx.core:core-ktx:1.12.0")
@@ -81,5 +95,7 @@ dependencies {
     // Koin
     implementation(platform("io.insert-koin:koin-bom:3.5.6"))
     implementation("io.insert-koin:koin-core:3.5.6")
-    implementation ("io.insert-koin:koin-android:$3.5.6")
+    implementation ("io.insert-koin:koin-android:3.5.6")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.6")
+
 }
