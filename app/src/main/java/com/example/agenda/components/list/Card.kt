@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,20 +35,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.agenda.components.button.CardButton
 import com.example.agenda.constants.ItemsMenu
-import com.example.agenda.constants.TaskStatus
 import com.example.agenda.model.TaskModel
 import com.example.agenda.ui.theme.ButtonDeleteTask
 import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.StrokeForm
-import com.example.agenda.viewmodel.FormViewModel
+import com.example.agenda.viewmodel.TaskFormViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Card(task: TaskModel, navController: NavController) {
     var isCardExpanded by remember { mutableStateOf(false) }
-    val viewModel = koinViewModel<FormViewModel>()
+    val viewModel = koinViewModel<TaskFormViewModel>()
 
 
     if (isCardExpanded) {
@@ -164,6 +164,7 @@ fun Card(task: TaskModel, navController: NavController) {
                         key = "task",
                         value = task
                     )
+
                     navController.navigate(ItemsMenu.UPDATE_TASK.name)
                 }
                 CardButton("Deletar", ButtonDeleteTask, Secondary, 14.sp) {

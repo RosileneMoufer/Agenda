@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FormViewModel(
+class TaskFormViewModel(
     private val repository: TasksRepository,
 ): ViewModel() {
 
@@ -41,6 +41,17 @@ class FormViewModel(
         }
     }
 
+    fun setTheValueTask(task: TaskModel) {
+        //viewModelScope.launch {
+        _uiState.value.title = task.title
+            _uiState.value.description = task.description
+            _uiState.value.status = task.status
+            _uiState.value.date = task.date
+        //}
+
+        println("eu estou aqui")
+    }
+
     fun cleanForm() {
         _uiState.update {it.copy(
             title = "",
@@ -50,9 +61,9 @@ class FormViewModel(
         )}
     }
 
-    fun statusForm(status: String) {
+    fun statusForm(newStatus: String) {
         _uiState.update {it.copy(
-            status = status
+            status = newStatus
         )}
     }
 
@@ -69,8 +80,16 @@ class FormViewModel(
     }
 
     fun update(task: TaskModel) {
+        val _task = TaskModel(
+            id = task.id,
+            title = _uiState.value.title,
+            description = _uiState.value.description,
+            status = _uiState.value.status,
+            date = _uiState.value.date
+        )
+
         viewModelScope.launch {
-            repository.update(task)
+            repository.update(_task)
         }
     }
 

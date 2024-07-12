@@ -46,16 +46,13 @@ import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.ui.theme.Title
-import com.example.agenda.viewmodel.FormViewModel
+import com.example.agenda.viewmodel.TaskFormViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun NewTaskScreen(navController: NavController, viewModel2: FormViewModel, uiState2: TaskFormUiState) {
+fun NewTaskScreen(navController: NavController, viewModel: TaskFormViewModel, uiState: TaskFormUiState) {
     val scope = rememberCoroutineScope()
-
-    val viewModel = koinViewModel<FormViewModel>()
-    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         modifier = Modifier
@@ -175,7 +172,7 @@ fun DescriptionComponent(uiState: TaskFormUiState) {
 }
 
 @Composable
-fun StatusComponent(uiState: TaskFormUiState, viewModel: FormViewModel) {
+fun StatusComponent(uiState: TaskFormUiState, viewModel: TaskFormViewModel) {
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
             "Status", style = TextStyle(
@@ -195,8 +192,10 @@ fun StatusComponent(uiState: TaskFormUiState, viewModel: FormViewModel) {
                     textColor = if (uiState.status == item.value) Secondary else Title,
                     12.sp
                 ) {
-                    //uiState.status = item.value
+
                     viewModel.statusForm(item.value)
+
+
                 }
             }
         }

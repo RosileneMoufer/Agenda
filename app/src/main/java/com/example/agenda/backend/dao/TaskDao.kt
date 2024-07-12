@@ -17,7 +17,7 @@ interface TaskDao {
     @Delete
     suspend fun removeTask(task: TaskEntity)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTask(task: TaskEntity)
 
     @Query("SELECT * FROM tasks WHERE id = :id")

@@ -21,7 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +34,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.agenda.components.Divisor
 import com.example.agenda.components.button.ActionButton
 import com.example.agenda.components.button.StatusButton
@@ -45,17 +45,24 @@ import com.example.agenda.state.TaskFormUiState
 import com.example.agenda.ui.theme.ButtonInactive
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
+import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.ui.theme.Title
-import com.example.agenda.viewmodel.FormViewModel
+import com.example.agenda.viewmodel.TaskFormViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun UpdateTaskScreen(task: TaskModel, navController: NavController) {
+fun UpdateTaskScreen(
+    task: TaskModel,
+    viewModel: TaskFormViewModel,
+    taskFormUiState: TaskFormUiState,
+    navController: NavHostController
+) {
 
     val scope = rememberCoroutineScope()
-    val viewModel = koinViewModel<FormViewModel>()
-    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(task.id) {
+        viewModel.setTheValueTask(task)
+    }
 
     Scaffold(
         modifier = Modifier
@@ -85,30 +92,29 @@ fun UpdateTaskScreen(task: TaskModel, navController: NavController) {
                 .padding(innitPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            TitleEditComponent(task, uiState)
+            TitleEditComponent(task, taskFormUiState)
 
             Divisor()
 
-            DescriptionEditComponent(task, uiState)
+            DescriptionEditComponent(task, taskFormUiState)
 
             Divisor()
 
-            StatusEditComponent(task)
+            StatusEditComponent(task, taskFormUiState, viewModel)
 
             Divisor()
 
-            DateEditComponent(task)
+            DateEditComponent(task, taskFormUiState)
         }
     }
 }
 
 @Composable
-fun TitleEditComponent(task: TaskModel, uiState: TaskFormUiState) {
-    uiState.title = task.title
+fun TitleEditComponent(task: TaskModel, taskFormUiState: TaskFormUiState) {
 
     TextField(
-        value = uiState.title,
-        onValueChange = uiState.onTitleChange,
+        value = taskFormUiState.title,
+        onValueChange = taskFormUiState.onTitleChange,
         label = {
             Text(
                 text = "Título",
@@ -129,10 +135,8 @@ fun TitleEditComponent(task: TaskModel, uiState: TaskFormUiState) {
 }
 
 @Composable
-fun DescriptionEditComponent(task: TaskModel, uiState: TaskFormUiState) {
+fun DescriptionEditComponent(task: TaskModel, taskFormUiState: TaskFormUiState) {
     var isExpanded by remember { mutableStateOf(false) }
-
-    uiState.description = task.description
 
     Row(
         Modifier
@@ -158,8 +162,8 @@ fun DescriptionEditComponent(task: TaskModel, uiState: TaskFormUiState) {
 
     if (isExpanded) {
         TextField(
-            value = uiState.description,
-            onValueChange = uiState.onDescriptionChange,
+            value = taskFormUiState.description,
+            onValueChange = taskFormUiState.onDescriptionChange,
             maxLines = 5,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedContainerColor = Secondary,
@@ -183,7 +187,9 @@ fun DescriptionEditComponent(task: TaskModel, uiState: TaskFormUiState) {
 }
 
 @Composable
-fun StatusEditComponent(task: TaskModel) {
+fun StatusEditComponent(task: TaskModel, taskFormUiState: TaskFormUiState, viewModel: TaskFormViewModel) {
+    val scope = rememberCoroutineScope()
+
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
             "Status", style = TextStyle(
@@ -199,11 +205,13 @@ fun StatusEditComponent(task: TaskModel) {
                 StatusButton(
                     Modifier.weight(1F),
                     title = item.value,
-                    backgroundColor = ButtonInactive,
-                    textColor = Title,
+                    backgroundColor = if (taskFormUiState.status == item.value) Primary else ButtonInactive,
+                    textColor = if (taskFormUiState.status == item.value) Secondary else Title,
                     12.sp
                 ) {
-                    // TODO
+                    scope.launch {
+                        viewModel.statusForm(item.value)
+                    }
                 }
             }
         }
@@ -211,32 +219,28 @@ fun StatusEditComponent(task: TaskModel) {
 }
 
 @Composable
-fun DateEditComponent(task: TaskModel) {
-    var isExpanded by remember { mutableStateOf(false) }
+fun DateEditComponent(task: TaskModel, uiState: TaskFormUiState,) {
 
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "Data", style = TextStyle(
+    TextField(
+        value = uiState.date,
+        onValueChange = uiState.onDateChange,
+        label = {
+            Text(
+                text = "Data",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )
-        )
-        IconButton(onClick = { isExpanded = !isExpanded }) {
-            Icon(
-                imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                contentDescription = "show/hide",
-                tint = Primary
-            )
-        }
-    }
-
-    if (isExpanded) {
-        // TODO
-    }
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedContainerColor = Secondary,
+            unfocusedBorderColor = Secondary,
+            unfocusedTextColor = Title,
+            focusedContainerColor = Secondary,
+            focusedBorderColor = StrokeForm,
+            focusedLabelColor = Title,
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    )
 }

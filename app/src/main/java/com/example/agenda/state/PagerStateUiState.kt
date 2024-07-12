@@ -1,8 +1,10 @@
 package com.example.agenda.state
 
+import androidx.compose.foundation.pager.PagerState
 import com.example.agenda.constants.TaskStatus
 import com.example.agenda.model.TaskModel
 
 data class PagerStateUiState(
-    val state: String = TaskStatus.PENDING.value,
+    val pagerState: Int = TaskStatus.PENDING.ordinal,
+    //val pagerState2:  = rememberPagerState(pageCount = { 3 })
 )

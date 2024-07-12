@@ -19,6 +19,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,13 +46,18 @@ import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.SubTitle
 import com.example.agenda.ui.theme.Title
+import com.example.agenda.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 3 })
+
+    val viewModel = koinViewModel<HomeViewModel>()
+    val uiStateHome by viewModel.uiState.collectAsState()
 
     var subMenuState by remember { mutableStateOf(itemsSubMenu[pagerState.currentPage]) }
 
@@ -120,7 +126,7 @@ fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController)
 
     when (page) {
         0 -> {
-            if (uiState.tasks.isEmpty()) {
+            if (uiState.pendingTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("pendentes")
             } else {
                 LazyColumn(
@@ -128,33 +134,39 @@ fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController)
                         .fillMaxWidth()
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) { itemsIndexed(uiState.tasks) { _, task ->
+                ) { itemsIndexed(uiState.pendingTasks) { _, task ->
                     Card(task, navController)
                 }}
             }
         }
 
         1 -> {
-            // fazer a requisição no banco
-            // verificar se o valor de retorno é vazio
-            // chamar o componente
-
-            if (myTasks.isEmpty()) {
+            if (uiState.inProgressTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("em progresso")
             } else {
-                //Card(task)
+                LazyColumn(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) { itemsIndexed(uiState.inProgressTasks) { _, task ->
+                    Card(task, navController)
+                }}
             }
         }
 
         2 -> {
-            // fazer a requisição no banco
-            // verificar se o valor de retorno é vazio
-            // chamar o componente
-
-            if (myTasks.isEmpty()) {
+            if (uiState.finishedTasks.isEmpty()) {
                 WhenDontHaveNothingToShow("terminados")
             } else {
-                //Card(task)
+                LazyColumn(
+                    Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) { itemsIndexed(uiState.finishedTasks) { _, task ->
+                    Card(task, navController)
+                }}
             }
         }
 

@@ -8,15 +8,18 @@ import com.example.agenda.state.PagerStateUiState
 import com.example.agenda.state.TaskFormUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class HomeViewModel: ViewModel() {
     //val pagerState = rememberPagerState(pageCount = { 3 })
 
-    var pagerState = mutableStateOf(TaskStatus.PENDING.value)
-
-    /*
-    private val _uiState = MutableStateFlow<PagerStateUiState(TaskStatus.PENDING.value)> =
+    private val _uiState: MutableStateFlow<PagerStateUiState> =
         MutableStateFlow(PagerStateUiState())
+    val uiState = _uiState.asStateFlow()
 
-    val uiState = _uiState.asStateFlow()*/
+    fun changeSubMenuSection(newPagerState: Int) {
+        _uiState.update {it.copy(
+            pagerState = newPagerState
+        )}
+    }
 }

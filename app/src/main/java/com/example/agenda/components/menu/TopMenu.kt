@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.viewmodel.FormViewModel
+import com.example.agenda.viewmodel.TaskFormViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +53,7 @@ fun TopBarNewTask(
     title: String,
     titleColor: Color,
     navController: NavController,
-    formViewModel: FormViewModel
+    formViewModel: TaskFormViewModel
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(bottom = 20.dp),
