@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class HomeViewModel: ViewModel() {
-    //val pagerState = rememberPagerState(pageCount = { 3 })
-
     private val _uiState: MutableStateFlow<PagerStateUiState> =
         MutableStateFlow(PagerStateUiState())
     val uiState = _uiState.asStateFlow()

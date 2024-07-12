@@ -122,8 +122,6 @@ fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
 
 @Composable
 fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController) {
-    val myTasks = intArrayOf()
-
     when (page) {
         0 -> {
             if (uiState.pendingTasks.isEmpty()) {

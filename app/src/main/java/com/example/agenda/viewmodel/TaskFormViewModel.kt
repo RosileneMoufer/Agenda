@@ -1,5 +1,6 @@
 package com.example.agenda.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.agenda.backend.repository.TasksRepository
@@ -14,6 +15,8 @@ import kotlinx.coroutines.launch
 class TaskFormViewModel(
     private val repository: TasksRepository,
 ): ViewModel() {
+
+    var isOpenCalendar = mutableStateOf( false )
 
     private val _uiState: MutableStateFlow<TaskFormUiState> =
         MutableStateFlow(TaskFormUiState())
@@ -41,15 +44,11 @@ class TaskFormViewModel(
         }
     }
 
-    fun setTheValueTask(task: TaskModel) {
-        //viewModelScope.launch {
+    fun setTheValueTaskToShowOnUpdateScreen(task: TaskModel) {
         _uiState.value.title = task.title
             _uiState.value.description = task.description
             _uiState.value.status = task.status
             _uiState.value.date = task.date
-        //}
-
-        println("eu estou aqui")
     }
 
     fun cleanForm() {
@@ -61,9 +60,15 @@ class TaskFormViewModel(
         )}
     }
 
-    fun statusForm(newStatus: String) {
+    fun setStatusValue(newStatus: String) {
         _uiState.update {it.copy(
             status = newStatus
+        )}
+    }
+
+    fun setDateValue(newDate: String) {
+        _uiState.update {it.copy(
+            date = newDate
         )}
     }
 

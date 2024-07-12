@@ -134,24 +134,7 @@ fun Card(task: TaskModel, navController: NavController) {
                     task.date,
                     style = TextStyle(fontSize = 14.sp)
                 )
-            }/*
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .padding(12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "Hora",
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
-                )
-                Text(
-                    "00:00",
-                    style = TextStyle(fontSize = 14.sp)
-                )
-            }*/
+            }
             Row(
                 Modifier
                     .fillMaxWidth()
