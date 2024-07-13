@@ -28,4 +28,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks WHERE status = :status")
     fun getTasksByStatus(status: String) : Flow<List<TaskEntity>>
+
+    @Query("SELECT * FROM tasks WHERE title LIKE :query OR description LIKE :query")
+    fun getTasksBySearch(query: String) : Flow<List<TaskEntity>>
 }

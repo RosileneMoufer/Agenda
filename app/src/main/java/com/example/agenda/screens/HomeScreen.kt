@@ -19,12 +19,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -40,26 +35,18 @@ import com.example.agenda.components.list.Card
 import com.example.agenda.components.menu.HomeSubMenu
 import com.example.agenda.components.menu.TopBarHome
 import com.example.agenda.constants.ItemsMenu
-import com.example.agenda.constants.itemsSubMenu
 import com.example.agenda.state.TasksListUiState
 import com.example.agenda.ui.theme.Primary
 import com.example.agenda.ui.theme.Secondary
 import com.example.agenda.ui.theme.SubTitle
 import com.example.agenda.ui.theme.Title
-import com.example.agenda.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 3 })
-
-    val viewModel = koinViewModel<HomeViewModel>()
-    val uiStateHome by viewModel.uiState.collectAsState()
-
-    var subMenuState by remember { mutableStateOf(itemsSubMenu[pagerState.currentPage]) }
 
     Scaffold(
         modifier = Modifier
@@ -69,7 +56,8 @@ fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
         topBar = {
             TopBarHome(
                 title = "Projeto",
-                titleColor = Title
+                titleColor = Title,
+                navController
             )
         },
         bottomBar = {
@@ -113,7 +101,6 @@ fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
                     .fillMaxHeight()
                     .padding(vertical = 16.dp)
             ) { page ->
-                subMenuState = itemsSubMenu[pagerState.currentPage]
                 ShowTasks(page, uiState, navController)
             }
         }

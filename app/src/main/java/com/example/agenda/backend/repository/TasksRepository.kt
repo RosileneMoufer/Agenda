@@ -28,8 +28,8 @@ class TasksRepository(
         dao.updateTask(task.toTaskEntity())
     }
 
-    fun getTask(id: Long) {
-        dao.getTask(id)
+    fun searchTasks(query: String): Flow<List<TaskEntity>> {
+        return dao.getTasksBySearch("%$query%")
     }
 }
 

@@ -1,4 +1,4 @@
-package com.example.agenda.components
+package com.example.agenda.components.form
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer

@@ -6,5 +6,4 @@ import com.example.agenda.model.TaskModel
 
 data class PagerStateUiState(
     val pagerState: Int = TaskStatus.PENDING.ordinal,
-    //val pagerState2:  = rememberPagerState(pageCount = { 3 })
 )

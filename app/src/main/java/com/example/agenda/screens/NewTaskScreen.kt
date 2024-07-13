@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.agenda.components.Divisor
+import com.example.agenda.components.form.Divisor
 import com.example.agenda.components.button.ActionButton
 import com.example.agenda.components.form.CalendarComponent
 import com.example.agenda.components.form.DateComponent

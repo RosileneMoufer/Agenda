@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,12 +16,12 @@ import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.model.TaskModel
 import com.example.agenda.screens.HomeScreen
 import com.example.agenda.screens.NewTaskScreen
+import com.example.agenda.screens.SearchScreen
 import com.example.agenda.screens.UpdateTaskScreen
 import com.example.agenda.state.TasksListUiState
 import com.example.agenda.ui.theme.AgendaTheme
 import com.example.agenda.viewmodel.TaskFormViewModel
 import com.example.agenda.viewmodel.TasksListViewModel
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -80,8 +79,16 @@ fun NavBottomBarController(
             } else {
                 // exibe tela "Not found"
             }
+        }
+        composable(ItemsMenu.SEARCH.name) {
+            val taskFormViewModel = koinViewModel<TaskFormViewModel>()
+            val taskListViewModel = koinViewModel<TasksListViewModel>()
+            val uiState by taskListViewModel.uiState.collectAsState(TasksListUiState())
+            val taskFormUiState by taskFormViewModel.uiState.collectAsState(TasksListUiState())
 
-
+            SearchScreen(
+                navController = navController
+            )
         }
     }
 }

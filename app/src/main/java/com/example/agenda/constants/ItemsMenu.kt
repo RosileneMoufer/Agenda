@@ -4,4 +4,5 @@ enum class ItemsMenu {
     HOME,
     NEW_TASK,
     UPDATE_TASK,
+    SEARCH,
 }
