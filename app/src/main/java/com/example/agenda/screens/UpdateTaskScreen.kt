@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,11 +28,11 @@ import com.example.agenda.components.form.TitleComponent
 import com.example.agenda.components.menu.TopBarNewTask
 import com.example.agenda.model.TaskModel
 import com.example.agenda.state.TaskFormUiState
-import com.example.agenda.ui.theme.Primary
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.Title
+import com.example.agenda.ui.theme.AgendaTheme
 import com.example.agenda.viewmodel.TaskFormViewModel
+import com.example.agenda.viewmodel.ThemeViewModel
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UpdateTaskScreen(
@@ -42,28 +45,34 @@ fun UpdateTaskScreen(
     val scope = rememberCoroutineScope()
     val ctx = LocalContext.current
 
+
     LaunchedEffect(task.id) {
         taskFormViewModel.setTheValueTaskToShowOnUpdateScreen(task)
     }
 
     Scaffold(
         modifier = Modifier
-            .background(Secondary)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
         topBar = {
             TopBarNewTask(
                 title = "Alterar Task",
-                titleColor = Title,
+                titleColor = MaterialTheme.colorScheme.tertiary,
                 navController,
                 taskFormViewModel
             )
         },
         bottomBar = {
-            ActionButton("Alterar", Primary, Secondary) {
+            ActionButton(
+                "Alterar",
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.background
+            ) {
                 scope.launch {
                     if ((uiState.title != "" && uiState.title.isNotBlank())
                         && (uiState.description != "" && uiState.description.isNotBlank())
-                        && (uiState.date != "" && uiState.date.isNotBlank())) {
+                        && (uiState.date != "" && uiState.date.isNotBlank())
+                    ) {
                         taskFormViewModel.update(task)
                         navController.popBackStack()
                     } else {
@@ -80,7 +89,7 @@ fun UpdateTaskScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Secondary)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(innitPadding)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -98,7 +107,7 @@ fun UpdateTaskScreen(
 
             DateComponent(uiState = uiState, formViewModel = taskFormViewModel)
 
-            if ( taskFormViewModel.isOpenCalendar.value ) {
+            if (taskFormViewModel.isOpenCalendar()) {
                 CalendarComponent(taskFormViewModel)
             }
         }

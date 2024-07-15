@@ -16,7 +16,7 @@ class TaskFormViewModel(
     private val repository: TasksRepository,
 ): ViewModel() {
 
-    var isOpenCalendar = mutableStateOf( false )
+    //var isOpenCalendar = mutableStateOf( false )
 
     private val _uiState: MutableStateFlow<TaskFormUiState> =
         MutableStateFlow(TaskFormUiState())
@@ -42,6 +42,16 @@ class TaskFormViewModel(
                 },
             )
         }
+    }
+
+    fun changeStateOpenCalendar(newIsOpenCalendar: Boolean) {
+        _uiState.update {it.copy(
+            isOpenCalendar = newIsOpenCalendar
+        )}
+    }
+
+    fun isOpenCalendar() : Boolean {
+        return _uiState.value.isOpenCalendar
     }
 
     fun setTheValueTaskToShowOnUpdateScreen(task: TaskModel) {
@@ -85,7 +95,7 @@ class TaskFormViewModel(
     }
 
     fun update(task: TaskModel) {
-        val _task = TaskModel(
+        val newTask = TaskModel(
             id = task.id,
             title = _uiState.value.title,
             description = _uiState.value.description,
@@ -94,7 +104,7 @@ class TaskFormViewModel(
         )
 
         viewModelScope.launch {
-            repository.update(_task)
+            repository.update(newTask)
         }
     }
 

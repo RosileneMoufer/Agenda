@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,9 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.agenda.state.TaskFormUiState
-import com.example.agenda.ui.theme.Primary
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.Title
 
 @Composable
 fun DescriptionComponent(uiState: TaskFormUiState) {
@@ -42,6 +40,7 @@ fun DescriptionComponent(uiState: TaskFormUiState) {
     ) {
         Text(
             "Descrição", style = TextStyle(
+                color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )
@@ -50,7 +49,7 @@ fun DescriptionComponent(uiState: TaskFormUiState) {
             Icon(
                 imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
                 contentDescription = "show/hide",
-                tint = Primary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }
@@ -61,13 +60,14 @@ fun DescriptionComponent(uiState: TaskFormUiState) {
             onValueChange = uiState.onDescriptionChange,
             maxLines = 5,
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = Secondary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
                 unfocusedBorderColor = Color.Transparent,
-                unfocusedTextColor = Title,
-                focusedContainerColor = Secondary,
+                unfocusedTextColor = MaterialTheme.colorScheme.tertiary,
+                focusedTextColor = MaterialTheme.colorScheme.tertiary,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
                 focusedBorderColor = Color.Transparent,
-                focusedLabelColor = Title,
-                cursorColor = Primary
+                focusedLabelColor = MaterialTheme.colorScheme.tertiary,
+                cursorColor = MaterialTheme.colorScheme.primary
             ),
             modifier = Modifier
                 .fillMaxWidth()

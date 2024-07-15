@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,32 +37,41 @@ import com.example.agenda.components.menu.HomeSubMenu
 import com.example.agenda.components.menu.TopBarHome
 import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.state.TasksListUiState
-import com.example.agenda.ui.theme.Primary
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.SubTitle
-import com.example.agenda.ui.theme.Title
+import com.example.agenda.state.ThemeUiState
+import com.example.agenda.viewmodel.ThemeViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
+fun HomeScreen(
+    navController: NavController,
+    uiState: TasksListUiState,
+    themeViewModel: ThemeViewModel,
+    themeUiState: ThemeUiState
+) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 3 })
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(Secondary)
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp), // MaterialTheme.colors.secondary
         topBar = {
             TopBarHome(
                 title = "Projeto",
-                titleColor = Title,
+                titleColor = MaterialTheme.colorScheme.tertiary,
+                themeViewModel,
+                themeUiState,
                 navController
             )
         },
         bottomBar = {
-            ActionButton("Criar Tasks", Primary, Secondary) {
+            ActionButton(
+                "Criar Tasks",
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.background
+            ) {
                 navController.navigate(ItemsMenu.NEW_TASK.name)
             }
         },
@@ -69,7 +79,7 @@ fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Secondary)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(
                     top = innitPadding.calculateTopPadding(),
                     bottom = innitPadding.calculateBottomPadding()
@@ -108,7 +118,7 @@ fun HomeScreen(navController: NavController, uiState: TasksListUiState) {
 }
 
 @Composable
-fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController) {
+fun ShowTasks(page: Int, uiState: TasksListUiState, navController: NavController) {
     when (page) {
         0 -> {
             if (uiState.pendingTasks.isEmpty()) {
@@ -119,9 +129,11 @@ fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController)
                         .fillMaxWidth()
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) { itemsIndexed(uiState.pendingTasks) { _, task ->
-                    Card(task, navController)
-                }}
+                ) {
+                    itemsIndexed(uiState.pendingTasks) { _, task ->
+                        Card(task, navController)
+                    }
+                }
             }
         }
 
@@ -134,9 +146,11 @@ fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController)
                         .fillMaxWidth()
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) { itemsIndexed(uiState.inProgressTasks) { _, task ->
-                    Card(task, navController)
-                }}
+                ) {
+                    itemsIndexed(uiState.inProgressTasks) { _, task ->
+                        Card(task, navController)
+                    }
+                }
             }
         }
 
@@ -149,9 +163,11 @@ fun ShowTasks(page: Int, uiState:TasksListUiState, navController: NavController)
                         .fillMaxWidth()
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) { itemsIndexed(uiState.finishedTasks) { _, task ->
-                    Card(task, navController)
-                }}
+                ) {
+                    itemsIndexed(uiState.finishedTasks) { _, task ->
+                        Card(task, navController)
+                    }
+                }
             }
         }
 
@@ -190,6 +206,7 @@ fun WhenDontHaveNothingToShow(taskStatus: String) {
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "Nada aqui, por agora.", style = TextStyle(
+                color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.W900,
                 lineHeight = 22.sp,
@@ -199,7 +216,10 @@ fun WhenDontHaveNothingToShow(taskStatus: String) {
         )
         Text(
             "É aqui que você encontrará seus projetos $taskStatus.",
-            style = TextStyle(textAlign = TextAlign.Center, color = SubTitle)
+            style = TextStyle(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
         )
     }
 }

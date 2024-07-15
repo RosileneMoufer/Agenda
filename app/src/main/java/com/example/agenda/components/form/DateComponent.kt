@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,29 +18,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.agenda.state.TaskFormUiState
-import com.example.agenda.ui.theme.Primary
 import com.example.agenda.viewmodel.TaskFormViewModel
 
 @Composable
 fun DateComponent(uiState: TaskFormUiState, formViewModel: TaskFormViewModel) {
     Row(
-        Modifier.fillMaxWidth().padding(16.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = "Data", style = TextStyle(
+                color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )
         )
         Text(
-            text = uiState.date,
+            text = uiState.date, style = TextStyle(color = MaterialTheme.colorScheme.tertiary,)
         )
-        IconButton(onClick = { formViewModel.isOpenCalendar.value = true }) {
+        IconButton(onClick = { formViewModel.changeStateOpenCalendar(true) }) {
             Icon(
                 imageVector = Icons.Filled.DateRange,
                 contentDescription = "Calendar",
-                tint = Primary
+                tint = MaterialTheme.colorScheme.primary
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.example.agenda.components.form
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -10,8 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.agenda.state.TaskFormUiState
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.Title
 
 @Composable
 fun TitleComponent(taskFormUiState: TaskFormUiState) {
@@ -21,17 +20,20 @@ fun TitleComponent(taskFormUiState: TaskFormUiState) {
         label = {
             Text(
                 text = "Título",
+                color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )
         },
         colors = OutlinedTextFieldDefaults.colors(
-            unfocusedContainerColor = Secondary,
-            unfocusedBorderColor = Secondary,
-            unfocusedTextColor = Title,
-            focusedContainerColor = Secondary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            unfocusedBorderColor = Color.Transparent,
+            unfocusedTextColor = MaterialTheme.colorScheme.tertiary,
+            focusedTextColor = MaterialTheme.colorScheme.tertiary,
+            focusedContainerColor = MaterialTheme.colorScheme.background,
             focusedBorderColor = Color.Transparent,
-            focusedLabelColor = Title,
+            focusedLabelColor = MaterialTheme.colorScheme.tertiary,
+            cursorColor = MaterialTheme.colorScheme.primary
         ),
         modifier = Modifier.fillMaxWidth()
     )

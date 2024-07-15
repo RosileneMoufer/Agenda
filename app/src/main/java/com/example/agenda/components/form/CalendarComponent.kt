@@ -5,12 +5,12 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.example.agenda.ui.theme.Primary
 import com.example.agenda.viewmodel.TaskFormViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -23,33 +23,33 @@ fun CalendarComponent(formViewModel: TaskFormViewModel) {
 
     DatePickerDialog(
         colors = DatePickerDefaults.colors(
-            containerColor = Color(0xFFF5F0FF),
+            containerColor = MaterialTheme.colorScheme.secondary,
         ),
         onDismissRequest = {
             // Action when the dialog is dismissed without selecting a date
-            formViewModel.isOpenCalendar.value = false
+            formViewModel.changeStateOpenCalendar(false)
         },
         confirmButton = {
             // Confirm button with custom action and styling
             TextButton(
                 onClick = {
                     // Action to set the selected date and close the dialog
-                    formViewModel.isOpenCalendar.value = false
+                    formViewModel.changeStateOpenCalendar(false)
                     formViewModel.setDateValue(datePickerState.selectedDateMillis?.convertMillisToDate() ?: "")
 
                 }
             ) {
-                Text("OK", color = Primary)
+                Text("OK", color = MaterialTheme.colorScheme.primary)
             }
         },
         dismissButton = {
             // Dismiss button to close the dialog without selecting a date
             TextButton(
                 onClick = {
-                    formViewModel.isOpenCalendar.value = false
+                    formViewModel.changeStateOpenCalendar(false)
                 }
             ) {
-                Text("CANCEL", color = Color.Green)
+                Text("CANCEL", color = MaterialTheme.colorScheme.error)
             }
         }
     ) {
@@ -57,12 +57,12 @@ fun CalendarComponent(formViewModel: TaskFormViewModel) {
         DatePicker(
             state = datePickerState,
             colors = DatePickerDefaults.colors(
-                selectedDayContainerColor = Primary,
-                selectedDayContentColor = Color.White,
-                selectedYearContainerColor = Color.DarkGray,
-                selectedYearContentColor = Color.White,
-                todayContentColor = Color.Red,
-                todayDateBorderColor = Color.Cyan
+                selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                selectedDayContentColor = MaterialTheme.colorScheme.secondary,
+                selectedYearContainerColor = MaterialTheme.colorScheme.tertiary,
+                selectedYearContentColor = MaterialTheme.colorScheme.background,
+                todayContentColor = MaterialTheme.colorScheme.primary,
+                todayDateBorderColor = MaterialTheme.colorScheme.primary,
             )
         )
     }

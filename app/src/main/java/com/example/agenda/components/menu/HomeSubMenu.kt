@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,10 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.agenda.constants.TaskStatus
 import com.example.agenda.constants.itemsSubMenu
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.SubMenuActive
-import com.example.agenda.ui.theme.SubMenuBackground
-import com.example.agenda.ui.theme.SubMenuInactive
 
 @Composable
 fun HomeSubMenu(
@@ -38,7 +35,7 @@ fun HomeSubMenu(
             .fillMaxWidth()
             .height(54.dp)
             .clip(RoundedCornerShape(40))
-            .background(SubMenuBackground)
+            .background(MaterialTheme.colorScheme.onBackground)
             .padding(horizontal = 4.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -50,13 +47,15 @@ fun HomeSubMenu(
                 .fillMaxWidth()
                 .weight(1F),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (currentItemSubMenuActive == TaskStatus.PENDING.ordinal) Secondary else SubMenuBackground
+                containerColor = if (currentItemSubMenuActive == TaskStatus.PENDING.ordinal)
+                    MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
             )
         ) {
             Text(
                 text = itemsSubMenu[0],
                 style = TextStyle(
-                    color = if (currentItemSubMenuActive == TaskStatus.PENDING.ordinal) SubMenuActive else SubMenuInactive,
+                    color = if (currentItemSubMenuActive == TaskStatus.PENDING.ordinal)
+                        MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
                     fontWeight = FontWeight.W600,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center
@@ -72,13 +71,15 @@ fun HomeSubMenu(
                 .fillMaxWidth()
                 .weight(1F),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (currentItemSubMenuActive == TaskStatus.IN_PROGRESS.ordinal) Secondary else SubMenuBackground
+                containerColor = if (currentItemSubMenuActive == TaskStatus.IN_PROGRESS.ordinal)
+                    MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
             )
         ) {
             Text(
                 text = itemsSubMenu[1],
                 style = TextStyle(
-                    color = if (currentItemSubMenuActive == TaskStatus.IN_PROGRESS.ordinal) SubMenuActive else SubMenuInactive,
+                    color = if (currentItemSubMenuActive == TaskStatus.IN_PROGRESS.ordinal)
+                        MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
                     fontWeight = FontWeight.W600,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center
@@ -94,13 +95,15 @@ fun HomeSubMenu(
                 .fillMaxWidth()
                 .weight(1F),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if ((currentItemSubMenuActive == TaskStatus.FINISHED.ordinal)) Secondary else SubMenuBackground
+                containerColor = if ((currentItemSubMenuActive == TaskStatus.FINISHED.ordinal))
+                    MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground
             )
         ) {
             Text(
                 text = itemsSubMenu[2],
                 style = TextStyle(
-                    color = if (currentItemSubMenuActive == TaskStatus.FINISHED.ordinal) SubMenuActive else SubMenuInactive,
+                    color = if (currentItemSubMenuActive == TaskStatus.FINISHED.ordinal)
+                        MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondary,
                     fontWeight = FontWeight.W600,
                     fontSize = 12.sp,
                     textAlign = TextAlign.Center

@@ -5,24 +5,29 @@ import androidx.lifecycle.viewModelScope
 import com.example.agenda.backend.entity.TaskEntity
 import com.example.agenda.backend.repository.TasksRepository
 import com.example.agenda.backend.repository.toTaskModel
-import com.example.agenda.model.TaskModel
-import com.example.agenda.state.SearchStateUiState
-import com.example.agenda.state.TaskFormUiState
-import kotlinx.coroutines.flow.Flow
+import com.example.agenda.state.SearchUiState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val repository: TasksRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<SearchStateUiState> =
-        MutableStateFlow(SearchStateUiState())
+    private val _uiState: MutableStateFlow<SearchUiState> =
+        MutableStateFlow(SearchUiState())
     val uiState = _uiState.asStateFlow()
+
+    init {
+        _uiState.update { currentState ->
+            currentState.copy(
+                onSearchChange = { search ->
+                    _uiState.update {
+                        it.copy(search = search)
+                    }
+                },
+            )}
+    }
 
     fun searchTasks(query: String) {
         viewModelScope.launch {
@@ -33,7 +38,8 @@ class SearchViewModel(
     }
 
     private fun updateTasks(result: List<TaskEntity>) {
-        _uiState.update {it.copy(
+        _uiState.update { it ->
+            it.copy(
             tasks = result.map { it.toTaskModel() }
         )}
     }

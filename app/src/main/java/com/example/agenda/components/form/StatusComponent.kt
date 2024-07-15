@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,10 +17,6 @@ import androidx.compose.ui.unit.sp
 import com.example.agenda.components.button.StatusButton
 import com.example.agenda.constants.TaskStatus
 import com.example.agenda.state.TaskFormUiState
-import com.example.agenda.ui.theme.ButtonInactive
-import com.example.agenda.ui.theme.Primary
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.TaskFormViewModel
 
 @Composable
@@ -39,8 +36,8 @@ fun StatusComponent(uiState: TaskFormUiState, formViewModel: TaskFormViewModel) 
                 StatusButton(
                     Modifier.weight(1F),
                     title = item.value,
-                    backgroundColor = if (uiState.status == item.value) Primary else ButtonInactive,
-                    textColor = if (uiState.status == item.value) Secondary else Title,
+                    backgroundColor = if (uiState.status == item.value) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onTertiary,
+                    textColor = if (uiState.status == item.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.tertiary,
                     12.sp
                 ) {
                     formViewModel.setStatusValue(item.value)

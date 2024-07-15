@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,10 +29,6 @@ import com.example.agenda.components.form.DescriptionComponent
 import com.example.agenda.components.form.StatusComponent
 import com.example.agenda.components.menu.TopBarNewTask
 import com.example.agenda.state.TaskFormUiState
-import com.example.agenda.ui.theme.Primary
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.StrokeForm
-import com.example.agenda.ui.theme.Title
 import com.example.agenda.viewmodel.TaskFormViewModel
 import kotlinx.coroutines.launch
 
@@ -46,22 +43,27 @@ fun NewTaskScreen(
 
     Scaffold(
         modifier = Modifier
-            .background(Secondary)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
         topBar = {
             TopBarNewTask(
                 title = "Criar Task",
-                titleColor = Title,
+                titleColor = MaterialTheme.colorScheme.tertiary,
                 navController,
                 formViewModel
             )
         },
         bottomBar = {
-            ActionButton("Criar", Primary, Secondary) {
+            ActionButton(
+                "Criar",
+                MaterialTheme.colorScheme.primary,
+                MaterialTheme.colorScheme.background
+            ) {
                 scope.launch {
                     if ((uiState.title != "" && uiState.title.isNotBlank())
                         && (uiState.description != "" && uiState.description.isNotBlank())
-                        && (uiState.date != "" && uiState.date.isNotBlank())) {
+                        && (uiState.date != "" && uiState.date.isNotBlank())
+                    ) {
                         formViewModel.save()
                         navController.popBackStack()
                     } else {
@@ -78,7 +80,7 @@ fun NewTaskScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Secondary)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(innitPadding)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -93,12 +95,12 @@ fun NewTaskScreen(
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Secondary,
-                    unfocusedBorderColor = Secondary,
-                    unfocusedTextColor = Title,
-                    focusedContainerColor = Secondary,
-                    focusedBorderColor = StrokeForm,
-                    focusedLabelColor = Title,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.background,
+                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    focusedBorderColor = MaterialTheme.colorScheme.outline,
+                    focusedLabelColor = MaterialTheme.colorScheme.tertiary,
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -115,7 +117,7 @@ fun NewTaskScreen(
 
             DateComponent(uiState, formViewModel)
 
-            if ( formViewModel.isOpenCalendar.value ) {
+            if (formViewModel.isOpenCalendar()) {
                 CalendarComponent(formViewModel)
             }
         }

@@ -7,6 +7,7 @@ import com.example.agenda.viewmodel.TaskFormViewModel
 import com.example.agenda.viewmodel.HomeViewModel
 import com.example.agenda.viewmodel.SearchViewModel
 import com.example.agenda.viewmodel.TasksListViewModel
+import com.example.agenda.viewmodel.ThemeViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
@@ -17,6 +18,7 @@ val appModule = module {
     viewModelOf(::TasksListViewModel)
     viewModelOf(::SearchViewModel)
     viewModelOf(::HomeViewModel)
+    viewModelOf(::ThemeViewModel)
 }
 
 val storageModule = module {

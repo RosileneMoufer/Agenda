@@ -22,6 +22,7 @@ import com.example.agenda.state.TasksListUiState
 import com.example.agenda.ui.theme.AgendaTheme
 import com.example.agenda.viewmodel.TaskFormViewModel
 import com.example.agenda.viewmodel.TasksListViewModel
+import com.example.agenda.viewmodel.ThemeViewModel
 import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +33,10 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            AgendaTheme {
+            val themeViewModel = koinViewModel<ThemeViewModel>()
+            val uiState by themeViewModel.uiState.collectAsState()
+
+            AgendaTheme(darkTheme = uiState.isDarkTheme) {
                 val navController = rememberNavController()
 
                 NavBottomBarController(navController)
@@ -45,50 +49,57 @@ class MainActivity : ComponentActivity() {
 fun NavBottomBarController(
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = ItemsMenu.HOME.name) {
-        composable(ItemsMenu.HOME.name) {
-            val viewModel = koinViewModel<TasksListViewModel>()
-            val uiState by viewModel.uiState.collectAsState(TasksListUiState())
+    val themeViewModel = koinViewModel<ThemeViewModel>()
+    val themeUiState by themeViewModel.uiState.collectAsState()
 
-            HomeScreen(
-                navController,
-                uiState
-            )
-        }
-        composable(ItemsMenu.NEW_TASK.name) {
-            val viewModel = koinViewModel<TaskFormViewModel>()
-            val uiState by viewModel.uiState.collectAsState()
+    AgendaTheme(darkTheme = themeUiState.isDarkTheme) {
+        NavHost(navController = navController, startDestination = ItemsMenu.HOME.name) {
+            composable(ItemsMenu.HOME.name) {
+                val viewModel = koinViewModel<TasksListViewModel>()
+                val uiState by viewModel.uiState.collectAsState(TasksListUiState())
 
-            NewTaskScreen(
-                navController,
-                viewModel,
-                uiState
-            )
-        }
-        composable(ItemsMenu.UPDATE_TASK.name) {
-            val results =
-                navController.previousBackStackEntry?.savedStateHandle?.get<TaskModel>("task")
-
-            val viewModel = koinViewModel<TaskFormViewModel>()
-            val uiState by viewModel.uiState.collectAsState()
-
-            if (results != null) {
-                UpdateTaskScreen(
-                    results, viewModel, uiState, navController
+                HomeScreen(
+                    navController,
+                    uiState,
+                    themeViewModel,
+                    themeUiState
                 )
-            } else {
-                // exibe tela "Not found"
             }
-        }
-        composable(ItemsMenu.SEARCH.name) {
-            val taskFormViewModel = koinViewModel<TaskFormViewModel>()
-            val taskListViewModel = koinViewModel<TasksListViewModel>()
-            val uiState by taskListViewModel.uiState.collectAsState(TasksListUiState())
-            val taskFormUiState by taskFormViewModel.uiState.collectAsState(TasksListUiState())
+            composable(ItemsMenu.NEW_TASK.name) {
+                val viewModel = koinViewModel<TaskFormViewModel>()
+                val uiState by viewModel.uiState.collectAsState()
 
-            SearchScreen(
-                navController = navController
-            )
+                NewTaskScreen(
+                    navController,
+                    viewModel,
+                    uiState
+                )
+            }
+            composable(ItemsMenu.UPDATE_TASK.name) {
+                val results =
+                    navController.previousBackStackEntry?.savedStateHandle?.get<TaskModel>("task")
+
+                val viewModel = koinViewModel<TaskFormViewModel>()
+                val uiState by viewModel.uiState.collectAsState()
+
+                if (results != null) {
+                    UpdateTaskScreen(
+                        results, viewModel, uiState, navController
+                    )
+                } else {
+                    // exibe tela "Not found"
+                }
+            }
+            composable(ItemsMenu.SEARCH.name) {
+                val taskFormViewModel = koinViewModel<TaskFormViewModel>()
+                val taskListViewModel = koinViewModel<TasksListViewModel>()
+                val uiState by taskListViewModel.uiState.collectAsState(TasksListUiState())
+                val taskFormUiState by taskFormViewModel.uiState.collectAsState(TasksListUiState())
+
+                SearchScreen(
+                    navController = navController
+                )
+            }
         }
     }
 }

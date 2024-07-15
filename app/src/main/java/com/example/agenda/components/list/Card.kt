@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,11 +37,6 @@ import androidx.navigation.NavController
 import com.example.agenda.components.button.CardButton
 import com.example.agenda.constants.ItemsMenu
 import com.example.agenda.model.TaskModel
-import com.example.agenda.ui.theme.ButtonDeleteTask
-import com.example.agenda.ui.theme.ButtonInactive
-import com.example.agenda.ui.theme.Primary
-import com.example.agenda.ui.theme.Secondary
-import com.example.agenda.ui.theme.StrokeForm
 import com.example.agenda.viewmodel.TaskFormViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,7 +51,7 @@ fun Card(task: TaskModel, navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    border = BorderStroke(1.dp, StrokeForm),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                     shape = RoundedCornerShape(6)
                 )
                 .padding(vertical = 16.dp)
@@ -65,7 +61,7 @@ fun Card(task: TaskModel, navController: NavController) {
                     Icon(
                         imageVector = Icons.Filled.KeyboardArrowUp,
                         contentDescription = "show less",
-                        tint = Primary
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -79,11 +75,12 @@ fun Card(task: TaskModel, navController: NavController) {
             ) {
                 Text(
                     "Título",
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary,
+                        fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 Text(
                     task.title,
-                    style = TextStyle(fontSize = 14.sp)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp)
                 )
             }
             Row(
@@ -96,11 +93,11 @@ fun Card(task: TaskModel, navController: NavController) {
             ) {
                 Text(
                     "Descrição",
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 Text(
                     task.description,
-                    style = TextStyle(fontSize = 14.sp)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp)
                 )
             }
             Spacer(modifier = Modifier.height(18.dp))
@@ -114,7 +111,7 @@ fun Card(task: TaskModel, navController: NavController) {
             ) {
                 Text(
                     "Status",
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary,fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 StatusComponent(task.status)
             }
@@ -128,13 +125,15 @@ fun Card(task: TaskModel, navController: NavController) {
             ) {
                 Text(
                     "Data",
-                    style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary,
+                        fontSize = 14.sp, fontWeight = FontWeight.W600)
                 )
                 Text(
                     task.date,
-                    style = TextStyle(fontSize = 14.sp)
+                    style = TextStyle(color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp)
                 )
             }
+            Spacer(modifier = Modifier.height(6.dp))
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -142,7 +141,9 @@ fun Card(task: TaskModel, navController: NavController) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.End),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                CardButton("Alterar", ButtonInactive, Primary, 14.sp) {
+                CardButton("Alterar",
+                    MaterialTheme.colorScheme.onTertiary,
+                    MaterialTheme.colorScheme.primary, 14.sp) {
                     navController.currentBackStackEntry?.savedStateHandle?.set(
                         key = "task",
                         value = task
@@ -150,7 +151,9 @@ fun Card(task: TaskModel, navController: NavController) {
 
                     navController.navigate(ItemsMenu.UPDATE_TASK.name)
                 }
-                CardButton("Deletar", ButtonDeleteTask, Secondary, 14.sp) {
+                CardButton("Deletar",
+                    MaterialTheme.colorScheme.error,
+                    MaterialTheme.colorScheme.background, 14.sp) {
                     viewModel.delete(task)
                 }
             }
@@ -160,19 +163,22 @@ fun Card(task: TaskModel, navController: NavController) {
             Modifier
                 .fillMaxWidth()
                 .border(
-                    border = BorderStroke(1.dp, StrokeForm),
+                    border = BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.outline
+                    ),
                     shape = RoundedCornerShape(12.dp)
                 )
                 .padding(top = 12.dp, bottom = 12.dp, start = 12.dp, end = 0.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(task.title)
+            Text(task.title, style = TextStyle(color = MaterialTheme.colorScheme.tertiary))
             IconButton(onClick = { isCardExpanded = !isCardExpanded }) {
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowDown,
                     contentDescription = "show more",
-                    tint = Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -185,10 +191,11 @@ fun StatusComponent(status: String) {
         "Pendente" -> Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(24.dp))
-                .background(Color.LightGray)
+                .background(MaterialTheme.colorScheme.outline)
                 .padding(vertical = 8.dp, horizontal = 24.dp)
         ) {
-            Text(text = status.uppercase(), style = TextStyle(color = Secondary))
+            Text(text = status.uppercase(),
+                style = TextStyle(color = MaterialTheme.colorScheme.tertiary))
         }
 
         "Em progresso" -> Box(
@@ -197,16 +204,18 @@ fun StatusComponent(status: String) {
                 .background(Color.Green)
                 .padding(vertical = 8.dp, horizontal = 24.dp)
         ) {
-            Text(text = status.uppercase(), style = TextStyle(color = Secondary))
+            Text(text = status.uppercase(),
+                style = TextStyle(color = MaterialTheme.colorScheme.background))
         }
 
         else -> Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(24.dp))
-                .background(Primary)
+                .background(MaterialTheme.colorScheme.primary)
                 .padding(vertical = 8.dp, horizontal = 24.dp)
         ) {
-            Text(text = status.uppercase(), style = TextStyle(color = Secondary))
+            Text(text = status.uppercase(),
+                style = TextStyle(color = MaterialTheme.colorScheme.background))
         }
     }
 
