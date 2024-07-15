@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material.icons.filled.BedtimeOff
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -43,10 +45,9 @@ fun TopBarHome(title: String,
         colors = TopAppBarDefaults.topAppBarColors(MaterialTheme.colorScheme.background),
         navigationIcon = {
             IconButton(onClick = { themeViewModel.changeThemeOfApp(!themeUiState.isDarkTheme)
-
-            println("dfdsfds " + themeViewModel.uiState.value)
             }) {
-                Icon(imageVector = Icons.Filled.Home,
+                Icon(imageVector = if (themeUiState.isDarkTheme)
+                    Icons.Filled.BedtimeOff else Icons.Filled.Bedtime,
                     contentDescription = "Dark Mode",
                     tint = MaterialTheme.colorScheme.primary)
             }

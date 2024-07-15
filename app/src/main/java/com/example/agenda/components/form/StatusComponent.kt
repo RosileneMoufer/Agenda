@@ -24,6 +24,7 @@ fun StatusComponent(uiState: TaskFormUiState, formViewModel: TaskFormViewModel) 
     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp)) {
         Text(
             "Status", style = TextStyle(
+                color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W500
             )

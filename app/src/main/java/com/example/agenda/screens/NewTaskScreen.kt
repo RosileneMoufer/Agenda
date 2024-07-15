@@ -27,6 +27,7 @@ import com.example.agenda.components.form.CalendarComponent
 import com.example.agenda.components.form.DateComponent
 import com.example.agenda.components.form.DescriptionComponent
 import com.example.agenda.components.form.StatusComponent
+import com.example.agenda.components.form.TitleComponent
 import com.example.agenda.components.menu.TopBarNewTask
 import com.example.agenda.state.TaskFormUiState
 import com.example.agenda.viewmodel.TaskFormViewModel
@@ -84,26 +85,7 @@ fun NewTaskScreen(
                 .padding(innitPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            TextField(
-                value = uiState.title,
-                onValueChange = uiState.onTitleChange,
-                label = {
-                    Text(
-                        text = "Título",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.W500
-                    )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.background,
-                    unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                    focusedContainerColor = MaterialTheme.colorScheme.background,
-                    focusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedLabelColor = MaterialTheme.colorScheme.tertiary,
-                ),
-                modifier = Modifier.fillMaxWidth()
-            )
+            TitleComponent(taskFormUiState = uiState)
 
             Divisor()
 

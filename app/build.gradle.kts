@@ -73,18 +73,8 @@ dependencies {
     // change the screen orientation
     implementation(libs.androidx.activity.compose)
 
-    /*
-    //Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
-
-    // Koin
-    implementation(libs.koin.bom)
-    implementation(libs.insert.koin.koin.core)
-    implementation ("io.insert-koin:koin-android:$3.5.6")
-     */
+    // icons
+    implementation(libs.androidx.material.icons.extended)
 
     //Room
     implementation("androidx.room:room-runtime:2.6.0")
